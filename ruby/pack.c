@@ -172,14 +172,6 @@ static VALUE MessagePack_Float_to_msgpack(int argc, VALUE *argv, VALUE self)
 static VALUE MessagePack_String_to_msgpack(int argc, VALUE *argv, VALUE self)
 {
 	ARG_BUFFER(out, argc, argv);
-#ifdef COMPAT_HAVE_ENCODING
-	int enc = ENCODING_GET(self);
-	if(enc != s_enc_utf8 && enc != s_enc_ascii8bit && enc != s_enc_usascii) {
-		if(!ENC_CODERANGE_ASCIIONLY(self)) {
-			self = rb_str_encode(self, s_enc_utf8_value, 0, Qnil);
-		}
-	}
-#endif
 	msgpack_pack_raw(out, RSTRING_LEN(self));
 	msgpack_pack_raw_body(out, RSTRING_PTR(self), RSTRING_LEN(self));
 	return out;
